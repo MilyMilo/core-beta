@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container">
+		<h1>Challenges</h1>
+	</div>
+</div>
+
+<div id="challenge-window" class="modal fade" tabindex="-1" role="dialog" x-data="" x-html="$store.challenge.data.view">
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			{% include "components/errors.html" %}
+		</div>
+	</div>
+
+	<div x-data="ChallengeBoard">
+		<div x-show="!loaded">
+			<div class="min-vh-50 d-flex align-items-center">
+				<div class="text-center w-100">
+					<i class="fas fa-circle-notch fa-spin fa-3x fa-fw spinner"></i>
+				</div>
+			</div>
+		</div>
+		<div x-show="loaded">
+			<template x-for="(category, idx) in getCategories()" :key="idx">
+				<div class="pt-5">
+					<div class="category-header col-md-12 mb-3">
+						<h3 x-text="category"></h3>
+					</div>
+					<div class="category-challenges col-md-12">
+						<div class="challenges-row col-md-12">
+							<template x-for="(c, idx) in getChallenges(category)" :key="c.id">
+								<div class="col-md-3 d-inline-block">
+									<button class="btn btn-dark challenge-button w-100 text-truncate pt-3 pb-3 mb-2" :value="c.id" @click="loadChallenge(c.id)">
+										<p x-text="c.name"></p>
+										<span x-text="c.value"></span>
+									</button>
+								</div>
+							</template>
+						</div>
+					</div>
+				</div>
+			</template>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+	{{ Assets.js("assets/js/challenges.js") }}
+{% endblock %}
