@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@ctfdio/ctfd-js": "https://github.com/CTFd/CTFd.js.git",
+    "@fontsource/lato": "^4.5.3",
+    "@fontsource/raleway": "^4.5.3",
     "@fortawesome/fontawesome-free": "6.0.0",
     "@popperjs/core": "^2.11.4",
     "alpinejs": "^3.9.1",

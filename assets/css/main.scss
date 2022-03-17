@@ -8,15 +8,8 @@
 @import "includes/utils/opacity.scss";
 @import "includes/utils/min-height.scss";
 
-html,
-body,
-.container {
-  font-family: "Lato", "LatoOffline", sans-serif;
-}
-
 h1,
 h2 {
-  font-family: "Raleway", "RalewayOffline", sans-serif;
   font-weight: 500;
   letter-spacing: 2px;
 }

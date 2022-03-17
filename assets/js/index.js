@@ -22,6 +22,11 @@ CTFd.init(window.init);
 // window.nunjucks = nunjucks;
 // window.Howl = Howl;
 
+CTFd._functions.events.eventAlert = (data) => {
+  console.log(data);
+  alert(JSON.stringify(data));
+}
+
 $(() => {
   styles();
   times();
