@@ -1,4 +1,5 @@
-import CTFd from "@ctfdio/ctfd-js";
+// import CTFd from "@ctfdio/ctfd-js";
+import CTFd from "/Users/kchung/Repositories/CTFd.js/main.js";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import { Howl } from "howler";
