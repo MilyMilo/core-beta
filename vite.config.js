@@ -34,6 +34,7 @@ export default defineConfig({
         index: resolve(__dirname, "assets/js/index.js"),
         settings: resolve(__dirname, "assets/js/settings.js"),
         challenges: resolve(__dirname, "assets/js/challenges.js"),
+        teams_private: resolve(__dirname, "assets/js/teams/private.js"),
         main: resolve(__dirname, "assets/css/main.scss"),
       },
     },

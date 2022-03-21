@@ -10,10 +10,10 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body clearfix">
+				<div class="modal-body clearfix" x-data="TeamEditModal">
 					{% with form = Forms.teams.TeamSettingsForm(obj=team) %}
 					{% from "macros/forms.html" import render_extra_fields %}
-					<form id="team-info-form" method="POST">
+					<form id="team-info-form" method="POST" @submit.prevent="updateProfile()">
 						<div class="form-group">
 							<b>{{ form.name.label }}</b>
 							{{ form.name(class="form-control") }}
@@ -62,7 +62,18 @@
 						{{ render_extra_fields(form.extra) }}
 
 						<div id="results">
-
+							<div class="alert alert-success alert-dismissable submit-row" role="alert" x-cloak="success" x-show="success">
+								<strong>Success!</strong>
+								 Your team's profile has been updated
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+							</div>
+							<template x-for="(msg, idx) in errors" :key="idx">
+								<div class="alert alert-danger alert-dismissable" role="alert">
+									<span class="sr-only">Error:</span>
+									<span x-text="msg"></span>
+									<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+								</div>
+							</template>
 						</div>
 						{{ form.submit(class="btn btn-primary btn-outlined float-right modal-action") }}
 					</form>
@@ -72,7 +83,7 @@
 		</div>
 	</div>
 
-	<div id="team-captain-modal" class="modal fade">
+	<div id="team-captain-modal" x-data="TeamCaptainModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -83,7 +94,7 @@
 				</div>
 				<div class="modal-body clearfix">
 					{% with form = Forms.teams.TeamCaptainForm(captain_id=team.captain_id) %}
-					<form id="team-captain-form" method="POST">
+					<form id="team-captain-form" method="POST" @submit.prevent="updateCaptain()">
 						<div class="form-group">
 							{{ form.captain_id.label }}
 							{% for member in team.members %}
@@ -93,6 +104,18 @@
 							{{ form.captain_id(class="form-control custom-select") }}
 						</div>
 						<div id="results">
+							<div class="alert alert-success alert-dismissable submit-row" role="alert" x-cloak="success" x-show="success">
+								<strong>Success!</strong>
+								 Your captain rights have been transferred
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+							</div>
+							<template x-for="(msg, idx) in errors" :key="idx">
+								<div class="alert alert-danger alert-dismissable" role="alert">
+									<span class="sr-only">Error:</span>
+									<span x-text="msg"></span>
+									<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+								</div>
+							</template>
 						</div>
 						{{ form.submit(class="btn btn-primary btn-outlined float-right modal-action") }}
 					</form>
@@ -102,7 +125,7 @@
 		</div>
 	</div>
 
-	<div id="team-invite-modal" class="modal fade">
+	<div id="team-invite-modal" x-data="TeamInviteModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -117,9 +140,9 @@
 						<div class="form-group">
 							<b>{{ form.link.label }}</b>
 							<div class="input-group mb-3">
-								{{ form.link(id="team-invite-link", class="form-control") }}
+								{{ form.link(id="team-invite-link", class="form-control", **{"x-ref": "link", "x-bind:value": "$store.inviteToken"}) }}
 								<div class="input-group-append">
-									<button id="team-invite-link-copy" class="btn btn-outline-secondary" type="button">
+									<button class="btn btn-outline-secondary" type="button" @click="copy()">
 										<i class="fas fa-clipboard"></i>
 									</button>
 								</div>
@@ -133,6 +156,23 @@
 						</div>
 					</form>
 					{% endwith %}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="team-disband-modal" x-data="TeamDisbandModal" class="modal fade">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Disband Team</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+				</div>
+				<div class="modal-body">
+					<p>Are you sure you want to disband your team?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" @click="disbandTeam()">Yes</button>
 				</div>
 			</div>
 		</div>
@@ -182,51 +222,27 @@
 				{% endif %}
 			</h2>
 			<div class="pt-3">
-				<a class="edit-team">
-					{% if team.captain_id == user.id %}
+					<div x-data="CaptainMenu">
+					<a class="edit-team" @click="editTeam()">
 						<i class="btn-fa fas fa-cogs fa-2x px-2"
 						   data-toggle="tooltip"
 						   data-placement="top"
 						   title="Edit Team"></i>
-
-						<a class="edit-captain">
+					</a>
+						<a class="edit-captain" @click="chooseCaptain()">
 							<i class="btn-fa fas fa-user-tag fa-2x px-2" data-toggle="tooltip" data-placement="top"
 							   title="Choose Captain"></i>
 						</a>
 
-						<a class="invite-members">
+						<a class="invite-members" @click="inviteMembers()">
 							<i class="btn-fa fas fa-ticket-alt fa-2x px-2" data-toggle="tooltip" data-placement="top"
 							   title="Invite Users"></i>
 						</a>
-						<a class="disband-team">
+						<a class="disband-team" @click="disbandTeam()">
 							<i class="btn-fa fas fa-trash-alt fa-2x px-2" data-toggle="tooltip" data-placement="top"
 								title="Disband Team"></i>
 						</a>
-					{% else %}
-						<i class="btn-fa fas fa-cogs fa-2x px-2 fa-disabled"
-						   data-toggle="tooltip"
-						   data-placement="top"
-						   title="Only team captains can edit team information"></i>
-						<a class="edit-captain">
-							<i class="btn-fa fas fa-user-tag fa-2x px-2 fa-disabled"
-							   data-toggle="tooltip"
-							   data-placement="top"
-							   title="Only team captains can choose a new captain"></i>
-						</a>
-						<a class="invite-members">
-							<i class="btn-fa fas fa-ticket-alt fa-2x px-2"
-								data-toggle="tooltip"
-								data-placement="top"
-								title="Only team captains can generate invite links"></i>
-						</a>
-						<a class="disband-team">
-							<i class="btn-fa fas fa-trash-alt fa-2x px-2 fa-disabled"
-								data-toggle="tooltip"
-								data-placement="top"
-								title="Only team captains can disband the team"></i>
-						</a>
-					{% endif %}
-				</a>
+					</div>
 				{% if team.website and (team.website.startswith('http://') or team.website.startswith('https://')) %}
 					<a href="{{ team.website }}" target="_blank" style="color: inherit;" rel="noopener">
 						<i class="fas fa-external-link-alt fa-2x px-2" data-toggle="tooltip" data-placement="top"
@@ -371,13 +387,5 @@
 		} | tojson }};
 		var team_captain = {{ (user.id == team.captain_id) | tojson }};
 	</script>
-	<script defer src="{{ url_for('views.themes', path='js/echarts.bundle.js') }}"></script>
-	{% if solves or awards %}
-		<script defer src="{{ url_for('views.themes', path='js/graphs.js') }}"></script>
-		<script defer src="{{ url_for('views.themes', path='js/pages/stats.js') }}"></script>
-	{% endif %}
-{% endblock %}
-
-{% block entrypoint %}
-	<script defer src="{{ url_for('views.themes', path='js/pages/teams/private.js') }}"></script>
+	{{ Assets.js("assets/js/teams/private.js") }}
 {% endblock %}
