@@ -61,9 +61,5 @@
 {% endblock %}
 
 {% block scripts %}
-	<script defer src="{{ url_for('views.themes', path='js/echarts.bundle.js') }}"></script>
-{% endblock %}
-
-{% block entrypoint %}
-	<script defer src="{{ url_for('views.themes', path='js/pages/scoreboard.js') }}"></script>
+	{{ Assets.js("assets/js/scoreboard.js") }}
 {% endblock %}
