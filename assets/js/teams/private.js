@@ -3,13 +3,10 @@ import "bootstrap/dist/js/bootstrap.bundle";
 import Alpine from "alpinejs";
 import CTFd from "../index";
 import { serializeJSON } from "@ctfdio/ctfd-js/forms";
-import { copyToClipboard } from "../utils/clipboard";
-import { cumulativeSum } from "../utils/math";
 import { getValues as getSolveValues, getSpec as getSolveSpec } from "../utils/graphs/solve-percentage";
 import { getValues as getCategoryValues, getSpec as getCategorySpec } from "../utils/graphs/categories";
-import {getValues as getUserValues, getSpec as getUserSpec } from "../utils/graphs/userscore";
+import { getValues as getUserValues, getSpec as getUserSpec } from "../utils/graphs/userscore";
 import embed from "vega-embed";
-import dayjs from "dayjs";
 
 window.Alpine = Alpine;
 
