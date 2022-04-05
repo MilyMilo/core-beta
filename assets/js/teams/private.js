@@ -98,12 +98,15 @@ Alpine.data("TeamInviteModal", () => ({
 }));
 
 Alpine.data("TeamDisbandModal", () => ({
+  errors: [],
+
   async disbandTeam() {
     let response = await CTFd.pages.teams.disbandTeam();
+
     if (response.success) {
       window.location.reload();
     } else {
-      alert(response.errors[""].join(" "));
+      this.errors = response.errors[""];
     }
   },
 }));

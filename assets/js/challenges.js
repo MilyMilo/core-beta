@@ -113,15 +113,12 @@ Alpine.data("ChallengeBoard", () => ({
     await CTFd.pages.challenge.displayChallenge(challengeId, (challenge) => {
       Alpine.store("challenge").data = challenge.data;
 
-      // this has to be in nextTick because bootstrap does not work otherwise
+      // nextTick is required here because we're working in a callback
       Alpine.nextTick(() => {
-        // this, for some reason, in callback doesn't want to use $refs
         new Modal("[x-ref='challengeWindow']").show();
       });
     });
   },
 }));
-
-// TODO: Implement Hints
 
 Alpine.start();

@@ -5,21 +5,18 @@ import advancedFormat from "dayjs/plugin/advancedFormat";
 
 import times from "./theme/times";
 import styles from "./theme/styles";
+import highlight from "./theme/highlight";
 
 import alerts from "./utils/alerts";
 import tooltips from "./utils/tooltips";
 import collapse from "./utils/collapse";
-import highlight from "./utils/highlight";
+
+import eventAlerts from "./utils/notifications/alerts";
+import eventToasts from "./utils/notifications/toasts";
 
 dayjs.extend(advancedFormat);
 
 CTFd.init(window.init);
-
-// TODO: Toast alerts
-CTFd._functions.events.eventAlert = (data) => {
-  console.log(data);
-  alert(JSON.stringify(data));
-};
 
 (() => {
   styles();
@@ -29,6 +26,9 @@ CTFd._functions.events.eventAlert = (data) => {
   alerts();
   tooltips();
   collapse();
+
+  eventToasts();
+  eventAlerts();
 })();
 
 export default CTFd;

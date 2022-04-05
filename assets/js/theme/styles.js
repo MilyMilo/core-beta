@@ -18,8 +18,10 @@ export default () => {
   });
 
   document.querySelectorAll(".page-select").forEach($el => {
-     const url = new URL(window.location);
-     url.searchParams.set("page", $el.nodeValue);
-     window.location.href = url.toString();
+     if ($el.nodeValue) {
+         const url = new URL(window.location);
+         url.searchParams.set("page", $el.nodeValue);
+         window.location.href = url.toString();
+     }
   });
 }
