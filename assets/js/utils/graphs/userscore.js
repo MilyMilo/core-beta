@@ -8,12 +8,12 @@ export function getSpec(description, values) {
       values: values,
     },
     width: "container",
-    mark: { 
-      type: "area", 
-      line: true, 
+    mark: {
+      type: "area",
+      line: true,
       point: true,
       // interpolate: "step-after",
-      tooltip: {"content": "data", "nearest": true}
+      tooltip: { content: "data", nearest: true },
     },
     encoding: {
       x: { field: "time", type: "temporal" },

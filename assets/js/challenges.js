@@ -1,75 +1,127 @@
-import $ from "jquery"
-import "bootstrap/dist/js/bootstrap.bundle";
-import Alpine from 'alpinejs'
-import CTFd from "./index"
-import { serializeJSON } from "@ctfdio/ctfd-js/forms"
-import { copyToClipboard } from "./utils/clipboard"
-import { submitChallenge } from "@ctfdio/ctfd-js/pages/challenge";
+import Alpine from "alpinejs";
+import CTFd from "./index";
+import dayjs from "dayjs";
+
+import { Modal, Tab } from "bootstrap";
 
 window.Alpine = Alpine;
 
-Alpine.store('challenge', {
-    data: null,
+Alpine.store("challenge", {
+  data: {
+    view: "",
+  },
 });
 
-Alpine.data('Challenge', () => ({
-    id: null,
-    submission: null,
-    solves: [],
-    response: null,
+Alpine.data("Hint", () => ({
+  id: null,
+  html: null,
 
-    async showChallenge() {
-        $(this.$el).tab('show');
-    },
-    async showSolves() {
-        this.solves = await CTFd.pages.challenge.loadSolves(this.id);
-        $(this.$el).tab('show');
-    },
-    async submitChallenge() {
-        this.response = await CTFd.pages.challenge.submitChallenge(this.id, this.submission);
-    },
-}));
+  async showHint(event) {
+    if (event.target.open) {
+      let response = await CTFd.pages.challenge.loadHint(this.id);
+      let hint = response.data;
+      if (hint.content) {
+        this.html = hint.html;
+      } else {
+        let answer = await CTFd.pages.challenge.displayUnlock(this.id);
+        if (answer) {
+          let unlock = await CTFd.pages.challenge.loadUnlock(this.id);
 
-Alpine.data('ChallengeBoard', () => ({
-    loaded: false,
-    challenges: [],
-    challenge: null,
-
-    async init() {
-        this.challenges = await CTFd.pages.challenges.getChallenges();
-        this.loaded = true;
-    },
-
-    getCategories() {
-        let categories = [];
-        this.challenges.forEach(challenge => {
-            if (!categories.includes(challenge.category)){
-                categories.push(challenge.category);
-            }
-        });
-        return categories;
-    },
-
-    getChallenges(category) {
-        if (category) {
-            return this.challenges.filter(challenge => challenge.category === category);
+          if (unlock.success) {
+            let response = await CTFd.pages.challenge.loadHint(this.id);
+            let hint = response.data;
+            this.html = hint.html;
+          } else {
+            event.target.open = false;
+            CTFd._functions.challenge.displayUnlockError(unlock);
+          }
         } else {
-            return this.challenges;
+          event.target.open = false;
         }
-    },
-
-    async loadChallenge(challengeId) {
-        await CTFd.pages.challenge.displayChallenge(challengeId, (challenge) => {
-            Alpine.store('challenge').data = challenge.data;
-            // Alpine.mutateDom(() => {
-            //     document.body.querySelectorAll('[x-cloak]').forEach((el) => {
-            //       el.setAttribute('data-alpine-was-cloaked', el.getAttribute('x-cloak') ?? '')
-            //     })
-            //   })
-            // Alpine.mutateDom(() => {})
-            $('#challenge-window').modal()
-        });
+      }
     }
+  },
 }));
 
-Alpine.start()
+Alpine.data("Challenge", () => ({
+  id: null,
+  submission: null,
+  tab: null,
+  solves: [],
+  response: null,
+
+  async showChallenge() {
+    new Tab(this.$el).show();
+  },
+
+  async showSolves() {
+    this.solves = await CTFd.pages.challenge.loadSolves(this.id);
+    this.solves.forEach(solve => {
+      solve.date = dayjs(solve.date).format("MMMM Do, h:mm:ss A");
+      return solve;
+    });
+    new Tab(this.$el).show();
+  },
+
+  async submitChallenge() {
+    this.response = await CTFd.pages.challenge.submitChallenge(
+      this.id,
+      this.submission
+    );
+
+    if (this.response.data.status === "correct") {
+      this.submission = "";
+    }
+  },
+}));
+
+Alpine.data("ChallengeBoard", () => ({
+  loaded: false,
+  challenges: [],
+  challenge: null,
+
+  async init() {
+    this.challenges = await CTFd.pages.challenges.getChallenges();
+    this.loaded = true;
+  },
+
+  getCategories() {
+    const categories = [];
+
+    this.challenges.forEach((challenge) => {
+      const { category } = challenge;
+
+      if (!categories.includes(category)) {
+        categories.push(category);
+      }
+    });
+
+    return categories;
+  },
+
+  getChallenges(category) {
+    if (category) {
+      return this.challenges.filter(
+        (challenge) => challenge.category === category
+      );
+    }
+
+    return this.challenges;
+  },
+
+  async loadChallenge(challengeId) {
+    await CTFd.pages.challenge.displayChallenge(challengeId, (challenge) => {
+      Alpine.store("challenge").data = challenge.data;
+
+      // this has to be in nextTick because bootstrap does not work otherwise
+      Alpine.nextTick(() => {
+        // this, for some reason, in callback doesn't want to use $refs
+        new Modal("[x-ref='challengeWindow']").show();
+      });
+    });
+  },
+}));
+
+// TODO: Implement Hints
+
+Alpine.start();

@@ -32,21 +32,21 @@ export function getValues(scoreboardDetail) {
     const times = [];
     for (let j = 0; j < team["solves"].length; j++) {
       team_score.push(team["solves"][j].value);
-      times.push(team["solves"][j].date)
+      times.push(team["solves"][j].date);
       // const date = dayjs(team["solves"][j].date);
       // times.push(date.toDate());
     }
 
     const total_scores = cumulativeSum(team_score);
     const team_name = team["name"];
-    let scores = times.map(function(e, i) {
+    let scores = times.map(function (e, i) {
       return {
-        "name": team_name,
-        "score": total_scores[i],
-        "date": e
-      }
+        name: team_name,
+        score: total_scores[i],
+        date: e,
+      };
     });
-    values = values.concat(scores)
+    values = values.concat(scores);
   }
 
   return values;

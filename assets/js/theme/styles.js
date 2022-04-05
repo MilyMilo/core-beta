@@ -1,45 +1,25 @@
-import "bootstrap/dist/js/bootstrap.bundle";
-import $ from "jquery";
-import hljs from "highlight.js";
-
 export default () => {
-  // TODO: This is kind of a hack to mimic a React-like state construct.
-  // It should be removed once we have a real front-end framework in place.
-  $(":input").each(function() {
-    $(this).data("initial", $(this).val());
-  });
+  document.querySelectorAll(".form-control").forEach($el => {
+      $el.addEventListener("onfocus", () => {
+        $el.classList.remove("input-filled-invalid");
+        $el.classList.add("input-filled-valid");
+      });
 
-  $(".form-control").bind({
-    focus: function() {
-      $(this).removeClass("input-filled-invalid");
-      $(this).addClass("input-filled-valid");
-    },
-    blur: function() {
-      if ($(this).val() === "") {
-        $(this).removeClass("input-filled-invalid");
-        $(this).removeClass("input-filled-valid");
+      $el.addEventListener("onblur", () => {
+          if ($el.nodeValue === "") {
+            $el.classList.remove("input-filled-valid");
+            $el.classList.remove("input-filled-invalid");
+          }
+      });
+
+      if ($el.nodeValue) {
+        $el.classList.add("input-filled-valid");
       }
-    }
   });
 
-  $(".form-control").each(function() {
-    if ($(this).val()) {
-      $(this).addClass("input-filled-valid");
-    }
+  document.querySelectorAll(".page-select").forEach($el => {
+     const url = new URL(window.location);
+     url.searchParams.set("page", $el.nodeValue);
+     window.location.href = url.toString();
   });
-
-  $(".page-select").change(function() {
-    let url = new URL(window.location);
-    url.searchParams.set("page", this.value);
-    window.location.href = url.toString();
-  });
-
-  $('[data-toggle="tooltip"]').tooltip();
-
-  $(() => {
-    // Syntax highlighting
-    document.querySelectorAll("pre code").forEach(block => {
-      hljs.highlightBlock(block);
-    });
-  });
-};
+}

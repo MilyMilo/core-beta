@@ -1,4 +1,3 @@
-
 export function getSpec(description, values) {
   return {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",

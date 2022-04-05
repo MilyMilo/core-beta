@@ -1,36 +1,34 @@
-// import CTFd from "@ctfdio/ctfd-js";
-import CTFd from "/Users/kchung/Repositories/CTFd.js/main.js";
+import CTFd from "@ctfdio/ctfd-js";
+
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
-import { Howl } from "howler";
-import $ from "cash-dom";
-// import events from "../events";
-// import config from "../config";
-// import styles from "../styles";
-// import times from "../times";
-// import { default as helpers } from "../helpers";
 
 import times from "./theme/times";
 import styles from "./theme/styles";
 
+import alerts from "./utils/alerts";
+import tooltips from "./utils/tooltips";
+import collapse from "./utils/collapse";
+import highlight from "./utils/highlight";
+
 dayjs.extend(advancedFormat);
 
 CTFd.init(window.init);
-// window.CTFd = CTFd;
-// window.helpers = helpers;
-// window.$ = $;
-// window.dayjs = dayjs;
-// window.nunjucks = nunjucks;
-// window.Howl = Howl;
 
+// TODO: Toast alerts
 CTFd._functions.events.eventAlert = (data) => {
   console.log(data);
   alert(JSON.stringify(data));
-}
+};
 
-$(() => {
+(() => {
   styles();
   times();
-});
+  highlight();
+
+  alerts();
+  tooltips();
+  collapse();
+})();
 
 export default CTFd;
