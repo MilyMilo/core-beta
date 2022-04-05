@@ -478,13 +478,6 @@ dayjs@^1.10.5, dayjs@^1.11.0:
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.0.tgz#009bf7ef2e2ea2d5db2e6583d2d39a4b5061e805"
   integrity sha512-JLC809s6Y948/FuCZPm5IX8rRhQwOiyMb2TfVVQEixG7P8Lm/gt5S7yoQZmC8x1UehI9Pb7sksEt4xx14m+7Ug==
 
-debug@^4.3:
-  version "4.3.4"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
-  integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
-  dependencies:
-    ms "2.1.2"
-
 delaunator@5:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/delaunator/-/delaunator-5.0.0.tgz#60f052b28bd91c9b4566850ebf7756efe821d81b"
@@ -655,7 +648,7 @@ fast-deep-equal@~3.1.3:
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
   integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
 
-fast-glob@^3.0.3, fast-glob@^3.2:
+fast-glob@^3.0.3:
   version "3.2.11"
   resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.2.11.tgz#a1172ad95ceb8a16e20caa5c5e56480e5129c1d9"
   integrity sha512-xrO3+1bxSo3ZVHAnqzyuewYT6aMFHRAd4Kcs92MAonjwQZLsK9d0SF1IyQ3k5PoirxTW0Oe/RqFgMQ6TcNE5Ew==
@@ -918,11 +911,6 @@ minimatch@^3.0.4:
   integrity sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==
   dependencies:
     brace-expansion "^1.1.7"
-
-ms@2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
-  integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
 nanoid@^3.3.1:
   version "3.3.2"
@@ -1521,20 +1509,13 @@ vega@^5.22.0:
     vega-voronoi "~4.2.0"
     vega-wordcloud "~4.1.3"
 
-"vite-manifest-css@https://github.com/ColdHeat/vite-manifest-css.git":
+vite-manifest-css@^0.0.1:
   version "0.0.1"
-  resolved "https://github.com/ColdHeat/vite-manifest-css.git#9e30de6d7b1977f37a8cbc48a28fe8d052f58d2d"
+  resolved "https://registry.yarnpkg.com/vite-manifest-css/-/vite-manifest-css-0.0.1.tgz#8146f532183062bd04dc27b3da09c280bbfb6e79"
+  integrity sha512-OlHMe3bebqWGPFp5JcKyambhaZeKYHPtRgEVR85b/SCifdsRBbcsTZ3m70Ho8D865OmsM3jVB8WjfZMBVxcplA==
   dependencies:
     rollup "^2.67.2"
     vite "^2.8.3"
-
-vite-plugin-ruby@^3.0.8:
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/vite-plugin-ruby/-/vite-plugin-ruby-3.0.8.tgz#07132f29b747b51d5437a7833ba909390977dbbb"
-  integrity sha512-FIuLpiLd234CYXl2601YG/MYUWPjcJxzQCMXIBEGuP+yZkn4ZSuKRt5Zmt844fh9XIDyxJaxirMQT6P5eTmqSw==
-  dependencies:
-    debug "^4.3"
-    fast-glob "^3.2"
 
 vite@^2.8.0, vite@^2.8.3:
   version "2.8.6"
