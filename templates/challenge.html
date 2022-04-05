@@ -32,71 +32,81 @@
               {{ challenge.value }}
             </h3>
 
-            <div class="challenge-tags text-center pt-2 pb-3">
-              {% block tags %}
-                {% for tag in tags %}
-                  <span class="challenge-tag badge bg-info">{{ tag }}</span>
-                {% endfor %}
-              {% endblock %}
-            </div>
 
-            <span class="challenge-desc">{% block description %}{{ challenge.html }}{% endblock %}</span>
-
-            <span class="challenge-connection-info">
-							{% block connection_info %}
-                {% set conn = challenge.connection_info %}
-                {% if not conn %}
-                {% elif conn.startswith("http") %}
-                  {{ conn | urlize(target="_blank") }}
-                {% else %}
-                  <code>{{ conn }}</code>
-                {% endif %}
-              {% endblock %}
-						</span>
-
-            {# TODO: Implement hints #}
-            <div class="challenge-hints hint-row row">
-              <div class="col-12 mb-3">
-              {% for hint in hints %}
-                <div x-data="Hint" x-init="id = {{ hint.id }}">
-                  {% if hint.content %}
-                  <details>
-                    <summary>View Hint</summary>
-                    <div>{{ hint.html | safe }}</div>
-                  </details>
-                  {% else %}
-                  <details @toggle="showHint(event)">
-                    <summary>Unlock Hint for {{ hint.cost }} points</summary>
-                    <div x-html="html"></div>
-                  </details>
-                  {% endif %}
-                </div>
-              {% endfor %}
+            {% if tags %}
+              <div class="challenge-tags text-center pt-2 pb-3">
+                {% block tags %}
+                  {% for tag in tags %}
+                    <span class="challenge-tag badge bg-info">{{ tag }}</span>
+                  {% endfor %}
+                {% endblock %}
               </div>
-            </div>
+            {% endif %}
 
-            <div class="row challenge-files text-center pb-3">
-              {% for file in files %}
-                <div class="col-md-4 col-sm-4 col-xs-12 file-button-wrapper d-block">
-                  <a
-                      class="btn btn-info btn-file mb-1 d-inline-block px-2 w-100 text-truncate"
-                      href="{{ file }}"
-                  >
-                    <i class="fas fa-download"></i>
-                    <small>
-                      {% set segments = file.split('/') %}
-                      {% set file = segments | last %}
-                      {% set token = file.split('?') | last %}
-                      {% if token %}
-                        {{ file | replace("?" + token, "") }}
-                      {% else %}
-                        {{ file }}
-                      {% endif %}
-                    </small>
-                  </a>
+            {% if challenge.html %}
+              <span class="challenge-desc">{% block description %}{{ challenge.html }}{% endblock %}</span>
+            {% endif %}
+
+            {% if challenge.connection_info %}
+              <span class="challenge-connection-info">
+                {% block connection_info %}
+                  {% set conn = challenge.connection_info %}
+                  {% if not conn %}
+                  {% elif conn.startswith("http") %}
+                    {{ conn | urlize(target="_blank") }}
+                  {% else %}
+                    <code>{{ conn }}</code>
+                  {% endif %}
+                {% endblock %}
+              </span>
+            {% endif %}
+
+            {% if hints %}
+              <div class="challenge-hints hint-row row">
+                <div class="col-12 mb-3">
+                {% for hint in hints %}
+                  <div x-data="Hint" x-init="id = {{ hint.id }}">
+                    {% if hint.content %}
+                    <details>
+                      <summary>View Hint</summary>
+                      <div>{{ hint.html | safe }}</div>
+                    </details>
+                    {% else %}
+                    <details @toggle="showHint(event)">
+                      <summary>Unlock Hint for {{ hint.cost }} points</summary>
+                      <div x-html="html"></div>
+                    </details>
+                    {% endif %}
+                  </div>
+                {% endfor %}
                 </div>
-              {% endfor %}
-            </div>
+              </div>
+            {% endif %}
+
+            {% if files %}
+              <div class="row challenge-files text-center pb-3">
+                {% for file in files %}
+                  <div class="col-md-4 col-sm-4 col-xs-12 file-button-wrapper d-block">
+                    <a
+                        class="btn btn-info btn-file mb-1 d-inline-block px-2 w-100 text-truncate"
+                        href="{{ file }}"
+                    >
+                      <i class="fas fa-download"></i>
+                      <small>
+                        {% set segments = file.split('/') %}
+                        {% set file = segments | last %}
+                        {% set token = file.split('?') | last %}
+                        {% if token %}
+                          {{ file | replace("?" + token, "") }}
+                        {% else %}
+                          {{ file }}
+                        {% endif %}
+                      </small>
+                    </a>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
 
             {% if max_attempts > 0 %}
               <div class="row text-center">
