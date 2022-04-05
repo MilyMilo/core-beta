@@ -1,17 +1,16 @@
-export function copyToClipboard(inputElement) {
-    inputElement.select()
-  
-    // Copy to clipboard
-    document.execCommand("copy");
-  
-    // Show tooltip to user
-    // $(event.target).tooltip({
-    //   title: "Copied!",
-    //   trigger: "manual"
-    // });
-    // $(event.target).tooltip("show");
-  
-    // setTimeout(function() {
-    //   $(event.target).tooltip("hide");
-    // }, 1500);
-  }
+import { Tooltip } from "bootstrap";
+
+export function copyToClipboard($input) {
+  // Copy to clipboard
+  navigator.clipboard.writeText($input.value);
+
+  const tooltip = new Tooltip($input, {
+    title: "Copied!",
+    trigger: "manual",
+  });
+
+  tooltip.show();
+  setTimeout(() => {
+    tooltip.hide();
+  }, 1500);
+}

@@ -8,12 +8,10 @@
 
 @use "~/@fontsource/lato/scss/mixins" as Lato;
 @use "~/@fontsource/raleway/scss/mixins" as Raleway;
-@include Lato.fontFace(
-  $fontDir: "../webfonts"
-);
-@include Raleway.fontFace(
-  $fontDir: "../webfonts"
-);
+
+@include Lato.fontFace($fontDir: "../webfonts");
+
+@include Raleway.fontFace($fontDir: "../webfonts");
 
 $fa-font-path: "../webfonts";
 @import "~/@fortawesome/fontawesome-free/scss/fontawesome.scss";
@@ -22,7 +20,6 @@ $fa-font-path: "../webfonts";
 
 // @import "~/@fontsource/lato/index.css";
 // @import "~/@fontsource/lato/index.css";
-
 
 html,
 body,
