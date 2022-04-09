@@ -98,6 +98,9 @@ Alpine.data("Challenge", () => ({
 
     if (this.response.data.status === "correct") {
       this.submission = "";
+
+      // Dispatch load-challenges event to call loadChallenges in the ChallengeBoard
+      this.$dispatch("load-challenges");
     }
   },
 }));
@@ -156,6 +159,10 @@ Alpine.data("ChallengeBoard", () => ({
     }
 
     return challenges;
+  },
+
+  async loadChallenges() {
+    this.challenges = await CTFd.pages.challenges.getChallenges();
   },
 
   async loadChallenge(challengeId) {
