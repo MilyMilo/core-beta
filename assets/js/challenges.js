@@ -4,6 +4,16 @@ import dayjs from "dayjs";
 
 import { Modal, Tab } from "bootstrap";
 
+function addTargetBlank(html) {
+  let dom = new DOMParser();
+  let view = dom.parseFromString(html, "text/html");
+  let links = view.querySelectorAll('a[href*="://"]');
+  links.forEach((link) => {
+    link.setAttribute("target", "_blank");
+  });
+  return view.documentElement.outerHTML;
+}
+
 window.Alpine = Alpine;
 
 Alpine.store("challenge", {
@@ -21,7 +31,7 @@ Alpine.data("Hint", () => ({
       let response = await CTFd.pages.challenge.loadHint(this.id);
       let hint = response.data;
       if (hint.content) {
-        this.html = hint.html;
+        this.html = addTargetBlank(hint.html);
       } else {
         let answer = await CTFd.pages.challenge.displayUnlock(this.id);
         if (answer) {
@@ -30,7 +40,7 @@ Alpine.data("Hint", () => ({
           if (unlock.success) {
             let response = await CTFd.pages.challenge.loadHint(this.id);
             let hint = response.data;
-            this.html = hint.html;
+            this.html = addTargetBlank(hint.html);
           } else {
             event.target.open = false;
             CTFd._functions.challenge.displayUnlockError(unlock);
@@ -167,6 +177,7 @@ Alpine.data("ChallengeBoard", () => ({
 
   async loadChallenge(challengeId) {
     await CTFd.pages.challenge.displayChallenge(challengeId, (challenge) => {
+      challenge.data.view = addTargetBlank(challenge.data.view);
       Alpine.store("challenge").data = challenge.data;
 
       // nextTick is required here because we're working in a callback
