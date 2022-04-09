@@ -50,13 +50,40 @@ Alpine.data("Challenge", () => ({
   solves: [],
   response: null,
 
+  getStyles() {
+    let styles = {
+      "modal-dialog": true,
+    };
+    try {
+      let size = CTFd.config.themeSettings.challenge_window_size;
+      switch (size) {
+        case "sm":
+          styles["modal-sm"] = true;
+          break;
+        case "lg":
+          styles["modal-lg"] = true;
+          break;
+        case "xl":
+          styles["modal-xl"] = true;
+          break;
+        default:
+          break;
+      }
+    } catch (error) {
+      // Ignore errors with challenge window size
+      console.log("Error processing challenge_window_size");
+      console.log(error);
+    }
+    return styles;
+  },
+
   async showChallenge() {
     new Tab(this.$el).show();
   },
 
   async showSolves() {
     this.solves = await CTFd.pages.challenge.loadSolves(this.id);
-    this.solves.forEach(solve => {
+    this.solves.forEach((solve) => {
       solve.date = dayjs(solve.date).format("MMMM Do, h:mm:ss A");
       return solve;
     });
@@ -96,17 +123,39 @@ Alpine.data("ChallengeBoard", () => ({
       }
     });
 
+    try {
+      const f = CTFd.config.themeSettings.challenge_category_order;
+      const getSort = new Function(`return (${f})`);
+      categories.sort(getSort());
+    } catch (error) {
+      // Ignore errors with theme category sorting
+      console.log("Error running challenge_category_order function");
+      console.log(error);
+    }
+
     return categories;
   },
 
   getChallenges(category) {
+    let challenges = this.challenges;
+
     if (category) {
-      return this.challenges.filter(
+      challenges = this.challenges.filter(
         (challenge) => challenge.category === category
       );
     }
 
-    return this.challenges;
+    try {
+      const f = CTFd.config.themeSettings.challenge_order;
+      const getSort = new Function(`return (${f})`);
+      challenges.sort(getSort());
+    } catch (error) {
+      // Ignore errors with theme challenge sorting
+      console.log("Error running challenge_order function");
+      console.log(error);
+    }
+
+    return challenges;
   },
 
   async loadChallenge(challengeId) {
