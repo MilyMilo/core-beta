@@ -155,9 +155,12 @@
                         'alert text-center w-100 mt-3 alert-success': response.data.status == 'correct',
                         'alert text-center w-100 mt-3 alert-info': response.data.status == 'already_solved',
                         'alert text-center w-100 mt-3 alert-danger': response.data.status == 'incorrect',
-                     }" role="alert"
+                      }" role="alert"
                   >
                     <strong x-text="response.data.message"></strong>
+                    <div x-show="(response.data.status == 'correct' || response.data.status == 'already_solved') && getNextId()">
+                      <button @click="nextChallenge()" class="btn btn-info mt-3">Next Challenge</button>
+                    </div>
                   </div>
                 </template>
               </div>

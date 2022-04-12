@@ -55,7 +55,8 @@ Alpine.data("Hint", () => ({
 
 Alpine.data("Challenge", () => ({
   id: null,
-  submission: null,
+  next_id: null,
+  submission: "",
   tab: null,
   solves: [],
   response: null,
@@ -98,6 +99,18 @@ Alpine.data("Challenge", () => ({
       return solve;
     });
     new Tab(this.$el).show();
+  },
+
+  getNextId() {
+    let data = Alpine.store("challenge").data;
+    return data.next_id;
+  },
+
+  async nextChallenge() {
+    Modal.getOrCreateInstance("[x-ref='challengeWindow']").hide();
+
+    // Dispatch load-challenge event to call loadChallenge in the ChallengeBoard
+    this.$dispatch("load-challenge", this.getNextId());
   },
 
   async submitChallenge() {
@@ -182,7 +195,7 @@ Alpine.data("ChallengeBoard", () => ({
 
       // nextTick is required here because we're working in a callback
       Alpine.nextTick(() => {
-        new Modal("[x-ref='challengeWindow']").show();
+        Modal.getOrCreateInstance("[x-ref='challengeWindow']").show();
       });
     });
   },
