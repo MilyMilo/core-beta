@@ -1,7 +1,13 @@
-# Vue 3 + Vite
+# core-beta
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Rewritten version of the CTFd core theme to use Bootstrap 5, Alpine.js, and vite to improve upon the existing CTFd theme structure. 
 
-## Recommended IDE Setup
+## Todo
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+- Document usage of CTFd.js
+- Document usage of Alpine.js
+- Document how we are using Vite
+- Document the building process
+- Document the important folders
+- Document usage of `vite-manifest-css`
+- Document usage of `manifest.json` and `manifest-css.json`
