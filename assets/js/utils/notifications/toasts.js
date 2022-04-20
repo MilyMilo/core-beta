@@ -9,5 +9,4 @@ export default () => {
       Alpine.store("toast", data);
       new Toast(document.querySelector("[x-ref='toast']")).show();
   }
-
 }
