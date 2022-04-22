@@ -61,7 +61,23 @@ Alpine.data("Challenge", () => ({
   solves: [],
   response: null,
 
-  getStyles() {
+  init() {
+    const self = this;
+    const submit = document.querySelector("#challenge-submit");
+
+    // eslint-disable-next-line no-undef
+    if (challenge && challenge.submit) {
+      submit.addEventListener("click",
+          Alpine.debounce(this.submitCustomChallenge.bind(self), 500)
+      )
+    } else {
+      submit.addEventListener("click",
+          Alpine.debounce(this.submitChallenge.bind(self), 500)
+      )
+    }
+  },
+
+  getStyles()  {
     let styles = {
       "modal-dialog": true,
     };
@@ -113,19 +129,29 @@ Alpine.data("Challenge", () => ({
     this.$dispatch("load-challenge", this.getNextId());
   },
 
+  async submitCustomChallenge() {
+    // eslint-disable-next-line no-undef
+    this.response = await challenge.submit(false);
+    await this.renderSubmissionResponse();
+  },
+
   async submitChallenge() {
     this.response = await CTFd.pages.challenge.submitChallenge(
       this.id,
       this.submission
     );
 
+    await this.renderSubmissionResponse();
+  },
+
+  async renderSubmissionResponse() {
     if (this.response.data.status === "correct") {
       this.submission = "";
-
-      // Dispatch load-challenges event to call loadChallenges in the ChallengeBoard
-      this.$dispatch("load-challenges");
     }
-  },
+
+    // Dispatch load-challenges event to call loadChallenges in the ChallengeBoard
+    this.$dispatch("load-challenges");
+  }
 }));
 
 Alpine.data("ChallengeBoard", () => ({
