@@ -177,8 +177,10 @@ Alpine.data("ChallengeBoard", () => ({
 
     try {
       const f = CTFd.config.themeSettings.challenge_category_order;
-      const getSort = new Function(`return (${f})`);
-      categories.sort(getSort());
+      if (f) {
+        const getSort = new Function(`return (${f})`);
+        categories.sort(getSort());
+      }
     } catch (error) {
       // Ignore errors with theme category sorting
       console.log("Error running challenge_category_order function");
@@ -199,8 +201,10 @@ Alpine.data("ChallengeBoard", () => ({
 
     try {
       const f = CTFd.config.themeSettings.challenge_order;
-      const getSort = new Function(`return (${f})`);
-      challenges.sort(getSort());
+      if (f) {
+        const getSort = new Function(`return (${f})`);
+        challenges.sort(getSort());
+      }
     } catch (error) {
       // Ignore errors with theme challenge sorting
       console.log("Error running challenge_order function");
