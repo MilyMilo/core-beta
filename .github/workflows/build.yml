@@ -3,6 +3,7 @@ name: build static
 on:
   workflow_run:
     workflows: ["prettier lint"]
+    branches: ["*"]
     types:
       - completed
 
