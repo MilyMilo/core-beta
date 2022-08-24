@@ -1,6 +1,10 @@
 name: build static
 
-on: [ push ]
+on:
+  workflow_run:
+    workflows: ["prettier lint"]
+    types:
+      - completed
 
 jobs:
   build:
