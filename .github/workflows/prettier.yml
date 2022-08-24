@@ -8,6 +8,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
       - name: Setup node.js
         uses: actions/setup-node@v3
         with:
@@ -16,3 +19,9 @@ jobs:
         run: yarn --frozen-lockfile
       - name: Lint with prettier
         run: yarn lint
+      - name: Build
+        run: yarn build
+      - name: Push built files
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: user_info
