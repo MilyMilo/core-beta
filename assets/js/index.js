@@ -32,10 +32,4 @@ CTFd.init(window.init);
   eventToasts();
 })();
 
-
-
-console.log('test action');
-
-
-
 export default CTFd;
